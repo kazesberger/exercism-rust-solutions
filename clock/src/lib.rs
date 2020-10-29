@@ -1,0 +1,34 @@
+use std::fmt;
+
+const HOURS_IN_DAY: i32 = 24;
+const MINUTES_IN_HOUR: i32 = 60;
+
+#[derive(Debug, Eq, PartialEq)]
+pub struct Clock {
+    minutes: i32,
+}
+
+impl Clock {
+    pub fn new(hours: i32, minutes: i32) -> Self {
+        let mut m = (hours * MINUTES_IN_HOUR + minutes) % (HOURS_IN_DAY * MINUTES_IN_HOUR);
+        if m < 0 {
+            m += HOURS_IN_DAY * MINUTES_IN_HOUR
+        }
+        Clock { minutes: m }
+    }
+
+    pub fn add_minutes(&self, minutes: i32) -> Self {
+        Clock::new(0, self.minutes + minutes)
+    }
+}
+
+impl fmt::Display for Clock {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            f,
+            "{:02}:{:02}",
+            self.minutes / MINUTES_IN_HOUR,
+            self.minutes % MINUTES_IN_HOUR
+        )
+    }
+}
